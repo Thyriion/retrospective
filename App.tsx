@@ -11,12 +11,15 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import {DarkTheme} from './theme/theme';
 const Tab = createMaterialBottomTabNavigator();
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <Tab.Navigator initialRouteName="Settings">
+    <NavigationContainer theme={DarkTheme}>
+      <Tab.Navigator
+        initialRouteName="Settings"
+        barStyle={{backgroundColor: DarkTheme.colors.notification}}>
         <Tab.Screen
           name="Home"
           component={HomeScreen}
