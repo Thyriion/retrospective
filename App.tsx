@@ -16,63 +16,22 @@ import {useColorScheme} from 'react-native';
 import RetroOverviewScreen from './screens/RetroOverviewScreen';
 import ActionItemsScreen from './screens/ActionItemsScreen';
 import {PaperProvider} from 'react-native-paper';
-const Tab = createMaterialBottomTabNavigator();
+import {useAuth0, Auth0Provider} from 'react-native-auth0';
+import Router from './authentication/Router';
 
 function App(): JSX.Element {
   const scheme = useColorScheme();
-
   const theme = scheme === 'dark' ? Dark : Light;
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer independent={true}>
-        <Tab.Navigator
-          initialRouteName="Home"
-          barStyle={{backgroundColor: theme.colors.primaryContainer}}
-          activeColor={theme.colors.onPrimary}
-          inactiveColor={theme.colors.primary}>
-          <Tab.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              tabBarIcon: ({color}) => (
-                <MaterialCommunityIcons name="home" color={color} size={26} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              tabBarIcon: ({color}) => (
-                <MaterialCommunityIcons name="cog" color={color} size={26} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Retro-Übersicht"
-            component={RetroOverviewScreen}
-            options={{
-              tabBarIcon: ({color}) => (
-                <MaterialCommunityIcons
-                  name="format-list-bulleted"
-                  color={color}
-                  size={26}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Aktuelle Maßnahmen"
-            component={ActionItemsScreen}
-            options={{
-              tabBarIcon: ({color}) => (
-                <MaterialCommunityIcons name="clock" color={color} size={26} />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <Auth0Provider
+      domain={'dev-1v7tlrecsuifiwei.us.auth0.com'}
+      clientId={'iUfFXDryXO6zZJnPdO85AE5tHqy5bT9t'}>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Router />
+        </NavigationContainer>
+      </PaperProvider>
+    </Auth0Provider>
   );
 }
 export default App;

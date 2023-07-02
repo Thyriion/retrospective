@@ -1,18 +1,22 @@
 /* eslint-disable prettier/prettier */
-import {View, Text} from 'react-native';
+import {View, Text, useColorScheme} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useTheme} from 'react-native-paper';
+import {PaperProvider, useTheme} from 'react-native-paper';
+import {NavigationContainer} from '@react-navigation/native';
+import {Dark, Light} from '../theme/theme';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SettingsScreen from './SettingsScreen';
+import RetroOverviewScreen from './RetroOverviewScreen';
+import ActionItemsScreen from './ActionItemsScreen';
 
 const HomeScreen = () => {
   const {colors} = useTheme();
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-      }}>
-      <Text style={{}}>HomeScreen</Text>
+    <View>
+      <Text>Bla</Text>
     </View>
   );
 };
