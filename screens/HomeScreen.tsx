@@ -1,22 +1,31 @@
 /* eslint-disable prettier/prettier */
-import {View, Text, useColorScheme} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {PaperProvider, useTheme} from 'react-native-paper';
-import {NavigationContainer} from '@react-navigation/native';
-import {Dark, Light} from '../theme/theme';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SettingsScreen from './SettingsScreen';
-import RetroOverviewScreen from './RetroOverviewScreen';
-import ActionItemsScreen from './ActionItemsScreen';
+import {Button, useTheme} from 'react-native-paper';
+import {useAuth0} from 'react-native-auth0';
 
 const HomeScreen = () => {
   const {colors} = useTheme();
 
+  const {clearSession, clearCredentials} = useAuth0();
+
+  const onLogout = async () => {
+    try {
+      await clearCredentials();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <View>
-      <Text>Bla</Text>
+    <View style={{backgroundColor: colors.background, flex: 1}}>
+      <Button
+        onPress={onLogout}
+        buttonColor={colors.primary}
+        textColor={colors.onPrimaryContainer}
+        rippleColor={colors.onPrimary}>
+        Blub
+      </Button>
     </View>
   );
 };
