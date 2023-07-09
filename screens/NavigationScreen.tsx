@@ -17,8 +17,8 @@ const NavigationScreen = () => {
       <Tab.Navigator
         initialRouteName="Home"
         barStyle={{backgroundColor: theme.colors.primaryContainer}}
-        activeColor={theme.colors.onPrimary}
-        inactiveColor={theme.colors.primary}>
+        activeColor={theme.colors.onSecondary}
+        inactiveColor={theme.colors.secondary}>
         <Tab.Screen
           name="Home"
           component={HomeScreen}

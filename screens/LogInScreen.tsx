@@ -3,26 +3,34 @@ import React, {useState} from 'react';
 import {useAuth0} from 'react-native-auth0';
 import NavigationScreen from './NavigationScreen';
 import {ActivityIndicator, Button, useTheme} from 'react-native-paper';
+import SignUpForm from '../components/SignUpForm';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import LoginForm from '../components/LoginForm';
+
+const Stack = createStackNavigator();
 
 const LogInScreen = () => {
-  const {authorize, clearSession, user, getCredentials, error} = useAuth0();
-  const [loading, setLoading] = useState(false);
-  const loggedIn = user !== undefined && user !== null;
-  const theme = useTheme();
-
-  const onPress = async () => {
-    try {
-      setLoading(true);
-      await authorize();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {colors} = useTheme();
   return (
     <>
-      {!loggedIn && (
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="LogIn"
+          screenOptions={{
+            headerMode: 'screen',
+            headerStyle: {
+              backgroundColor: colors.primaryContainer,
+              borderColor: colors.primary,
+              shadowColor: colors.secondaryContainer,
+            },
+            headerTintColor: colors.secondary,
+          }}>
+          <Stack.Screen name="LogIn" component={LoginForm} />
+          <Stack.Screen name="SignUp" component={SignUpForm} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      {/* {!loggedIn && (
         <View
           style={{
             flex: 1,
@@ -42,7 +50,7 @@ const LogInScreen = () => {
           </View>
         </View>
       )}
-      {loggedIn && <NavigationScreen />}
+      {loggedIn && <NavigationScreen />} */}
     </>
   );
 };

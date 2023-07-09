@@ -22,7 +22,7 @@ const HomeScreen = () => {
       <Button
         onPress={onLogout}
         buttonColor={colors.primary}
-        textColor={colors.onPrimaryContainer}
+        textColor={colors.secondary}
         rippleColor={colors.onPrimary}>
         Blub
       </Button>

@@ -21,7 +21,8 @@ model User {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
-  image     String
+  password  String   @unique
+  image     String?
   team      Team?    @relation(fields: [teamId], references: [id])
   teamId    Int?
   createdAt DateTime @default(now())
