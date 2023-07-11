@@ -1,9 +1,10 @@
 import {Text, View, Alert, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useTheme, Button, TextInput} from 'react-native-paper';
-import {Dark} from '../theme/theme';
 import {ErrorMessage} from '@hookform/error-message';
 import {createUser} from '../lib/supabase';
+import {useContext} from 'react';
+import {AuthContext} from '../context/AuthContext';
 
 const SignUpForm = () => {
   const {
@@ -19,8 +20,11 @@ const SignUpForm = () => {
   });
 
   const {colors} = useTheme();
+  const {user, login} = useContext(AuthContext);
+
   const onSubmit = userData => {
     createUser(userData.username, userData.email, userData.password);
+    login(userData.email, userData.password);
   };
 
   const styles = StyleSheet.create({

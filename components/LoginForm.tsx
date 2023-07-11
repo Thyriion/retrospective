@@ -1,8 +1,9 @@
-import {View, Text, Pressable, StyleSheet, TextInput, Button} from 'react-native';
-import React from 'react';
-import {useTheme} from 'react-native-paper';
-import { Controller, useForm } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
+import {View, Text, Pressable, StyleSheet, TextInput} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Button, useTheme} from 'react-native-paper';
+import {Controller, useForm} from 'react-hook-form';
+import {ErrorMessage} from '@hookform/error-message';
+import {AuthContext} from '../context/AuthContext';
 
 const LoginForm = ({navigation}) => {
   const {
@@ -11,15 +12,15 @@ const LoginForm = ({navigation}) => {
     formState: {errors, isValid},
   } = useForm({
     defaultValues: {
-      username: '',
       email: '',
       password: '',
     },
   });
+  const {user, login} = useContext(AuthContext);
 
   const {colors} = useTheme();
   const onSubmit = userData => {
-    createUser(userData.username, userData.email, userData.password);
+    login(userData.email, userData.password);
   };
 
   const styles = StyleSheet.create({
@@ -48,38 +49,10 @@ const LoginForm = ({navigation}) => {
       }}>
       <View
         style={{
-          flex: 1,
           justifyContent: 'center',
           backgroundColor: colors.background,
           alignItems: 'center',
         }}>
-        <Controller
-          control={control}
-          name="username"
-          render={({field: {onChange, value, onBlur}}) => (
-            <TextInput
-              placeholder="Benutzername"
-              value={value}
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              style={styles.textInput}
-              placeholderTextColor="#C0C0C0"
-            />
-          )}
-          rules={{
-            required: {
-              value: true,
-              message: 'Das Feld ist ein Pflichtfeld!',
-            },
-          }}
-        />
-        <ErrorMessage
-          errors={errors}
-          name="username"
-          render={({message}) => (
-            <Text style={styles.errorMessage}>{message}</Text>
-          )}
-        />
         <Controller
           control={control}
           name="email"
@@ -92,23 +65,6 @@ const LoginForm = ({navigation}) => {
               style={styles.textInput}
               placeholderTextColor="#C0C0C0"
             />
-          )}
-          rules={{
-            required: {
-              value: true,
-              message: 'Das Feld ist ein Pflichtfeld!',
-            },
-            pattern: {
-              value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-              message: 'Keine gültige E-Mail',
-            },
-          }}
-        />
-        <ErrorMessage
-          errors={errors}
-          name="email"
-          render={({message}) => (
-            <Text style={styles.errorMessage}>{message}</Text>
           )}
         />
         <Controller
@@ -147,7 +103,7 @@ const LoginForm = ({navigation}) => {
           textColor="#f5f5f5"
           rippleColor={colors.onPrimary}
           style={{width: 150, marginTop: 20}}>
-          Sign Up
+          Einloggen
         </Button>
       </View>
       <Pressable
@@ -155,8 +111,12 @@ const LoginForm = ({navigation}) => {
           navigation.navigate('SignUp');
         }}>
         <Text
-          style={{textDecorationLine: 'underline', color: colors.secondary}}>
-          Sign In
+          style={{
+            textDecorationLine: 'underline',
+            color: colors.secondary,
+            marginTop: 20,
+          }}>
+          Registrieren
         </Text>
       </Pressable>
     </View>

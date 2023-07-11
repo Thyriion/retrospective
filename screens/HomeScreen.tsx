@@ -1,26 +1,20 @@
 /* eslint-disable prettier/prettier */
 import {View} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, useTheme} from 'react-native-paper';
-import {useAuth0} from 'react-native-auth0';
+import {logOut} from '../lib/supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../context/AuthContext';
 
 const HomeScreen = () => {
   const {colors} = useTheme();
 
-  const {clearSession, clearCredentials} = useAuth0();
-
-  const onLogout = async () => {
-    try {
-      await clearCredentials();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const {logout} = useContext(AuthContext);
 
   return (
     <View style={{backgroundColor: colors.background, flex: 1}}>
       <Button
-        onPress={onLogout}
+        onPress={logout}
         buttonColor={colors.primary}
         textColor={colors.secondary}
         rippleColor={colors.onPrimary}>
