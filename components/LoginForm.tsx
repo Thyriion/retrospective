@@ -1,9 +1,17 @@
-import {View, Text, Pressable, StyleSheet, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  useColorScheme,
+} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {Button, useTheme} from 'react-native-paper';
 import {Controller, useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
 import {AuthContext} from '../context/AuthContext';
+import {themeColors} from '../styles';
 
 const LoginForm = ({navigation}) => {
   const {
@@ -18,41 +26,52 @@ const LoginForm = ({navigation}) => {
   });
   const {user, login} = useContext(AuthContext);
 
-  const {colors} = useTheme();
+  const scheme = useColorScheme();
+
   const onSubmit = userData => {
     login(userData.email, userData.password);
   };
 
   const styles = StyleSheet.create({
     textInput: {
-      backgroundColor: colors.primary,
-      padding: 10,
+      backgroundColor: themeColors.violet500,
+      paddingLeft: 10,
       marginVertical: 5,
-      color: '#000',
+      color: themeColors.violet100,
       width: 300,
       height: 35,
+      borderRadius: 5,
     },
     errorMessage: {
-      backgroundColor: 'red',
+      backgroundColor: themeColors.red500,
       padding: 10,
-      color: 'black',
+      color: themeColors.gray100,
+      borderRadius: 50,
+    },
+    background: {
+      backgroundColor:
+        scheme === 'dark' ? themeColors.gray900 : themeColors.gray100,
     },
   });
 
   return (
     <View
-      style={{
-        backgroundColor: colors.background,
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <View
-        style={{
+      style={[
+        {
+          flex: 1,
           justifyContent: 'center',
-          backgroundColor: colors.background,
           alignItems: 'center',
-        }}>
+        },
+        styles.background,
+      ]}>
+      <View
+        style={[
+          {
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          styles.background,
+        ]}>
         <Controller
           control={control}
           name="email"
@@ -63,7 +82,7 @@ const LoginForm = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={value => onChange(value)}
               style={styles.textInput}
-              placeholderTextColor="#C0C0C0"
+              placeholderTextColor={themeColors.violet200}
             />
           )}
         />
@@ -77,7 +96,7 @@ const LoginForm = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={value => onChange(value)}
               style={styles.textInput}
-              placeholderTextColor="#C0C0C0"
+              placeholderTextColor={themeColors.violet200}
               textContentType="password"
               secureTextEntry={true}
             />
@@ -99,26 +118,21 @@ const LoginForm = ({navigation}) => {
 
         <Button
           onPress={handleSubmit(onSubmit)}
-          buttonColor={colors.primary}
-          textColor="#f5f5f5"
-          rippleColor={colors.onPrimary}
+          buttonColor={themeColors.violet500}
+          textColor={themeColors.violet100}
+          rippleColor={themeColors.violet300}
           style={{width: 150, marginTop: 20}}>
           Einloggen
         </Button>
       </View>
-      <Pressable
-        onPress={() => {
-          navigation.navigate('SignUp');
-        }}>
-        <Text
-          style={{
-            textDecorationLine: 'underline',
-            color: colors.secondary,
-            marginTop: 20,
-          }}>
-          Registrieren
-        </Text>
-      </Pressable>
+      <Button
+        onPress={() => navigation.navigate('SignUp')}
+        buttonColor={themeColors.violet500}
+        textColor={themeColors.violet100}
+        rippleColor={themeColors.violet300}
+        style={{width: 150, marginTop: 10}}>
+        Registrieren
+      </Button>
     </View>
   );
 };

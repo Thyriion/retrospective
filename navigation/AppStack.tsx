@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {useTheme} from 'react-native-paper';
@@ -7,17 +7,31 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import SettingsScreen from '../screens/SettingsScreen';
 import RetroOverviewScreen from '../screens/RetroOverviewScreen';
 import ActionItemsScreen from '../screens/ActionItemsScreen';
+import {styles, themeColors} from '../styles';
+import {useColorScheme} from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function AppStack() {
-  const {colors} = useTheme();
+  const scheme = useColorScheme();
+
+  const styles = StyleSheet.create({
+    barStyle: {
+      backgroundColor:
+        scheme === 'dark' ? themeColors.violet700 : themeColors.violet200,
+    },
+  });
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      barStyle={{backgroundColor: colors.primaryContainer}}
-      activeColor={colors.onSecondary}
-      inactiveColor={colors.secondary}>
+      barStyle={styles.barStyle}
+      activeColor={
+        scheme === 'dark' ? themeColors.violet200 : themeColors.violet800
+      }
+      inactiveColor={
+        scheme === 'dark' ? themeColors.violet100 : themeColors.violet600
+      }>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -28,11 +42,11 @@ export default function AppStack() {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Aktuelle Maßnahmen"
+        component={ActionItemsScreen}
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="cog" color={color} size={26} />
+            <MaterialCommunityIcons name="clock" color={color} size={26} />
           ),
         }}
       />
@@ -50,11 +64,11 @@ export default function AppStack() {
         }}
       />
       <Tab.Screen
-        name="Aktuelle Maßnahmen"
-        component={ActionItemsScreen}
+        name="Settings"
+        component={SettingsScreen}
         options={{
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="clock" color={color} size={26} />
+            <MaterialCommunityIcons name="cog" color={color} size={26} />
           ),
         }}
       />

@@ -1,10 +1,11 @@
-import {Text, View, Alert, StyleSheet} from 'react-native';
+import {Text, View, Alert, StyleSheet, useColorScheme} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useTheme, Button, TextInput} from 'react-native-paper';
 import {ErrorMessage} from '@hookform/error-message';
 import {createUser} from '../lib/supabase';
 import {useContext} from 'react';
 import {AuthContext} from '../context/AuthContext';
+import {themeColors} from '../styles';
 
 const SignUpForm = () => {
   const {
@@ -22,6 +23,8 @@ const SignUpForm = () => {
   const {colors} = useTheme();
   const {user, login} = useContext(AuthContext);
 
+  const scheme = useColorScheme();
+
   const onSubmit = userData => {
     createUser(userData.username, userData.email, userData.password);
     login(userData.email, userData.password);
@@ -29,28 +32,35 @@ const SignUpForm = () => {
 
   const styles = StyleSheet.create({
     textInput: {
-      backgroundColor: colors.primary,
-      padding: 10,
+      backgroundColor: themeColors.violet500,
       marginVertical: 5,
-      color: '#000',
+      color: themeColors.violet100,
       width: 300,
       height: 35,
+      borderRadius: 5,
     },
     errorMessage: {
-      backgroundColor: 'red',
+      backgroundColor: themeColors.red500,
       padding: 10,
-      color: 'black',
+      color: themeColors.gray100,
+      borderRadius: 50,
+    },
+    background: {
+      backgroundColor:
+        scheme === 'dark' ? themeColors.gray900 : themeColors.gray100,
     },
   });
 
   return (
     <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: colors.background,
-        alignItems: 'center',
-      }}>
+      style={[
+        {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        styles.background,
+      ]}>
       <Controller
         control={control}
         name="username"
@@ -141,9 +151,9 @@ const SignUpForm = () => {
 
       <Button
         onPress={handleSubmit(onSubmit)}
-        buttonColor={colors.primary}
-        textColor="#f5f5f5"
-        rippleColor={colors.onPrimary}
+        buttonColor={themeColors.violet500}
+        textColor={themeColors.violet100}
+        rippleColor={themeColors.violet300}
         style={{width: 150, marginTop: 20}}>
         Sign Up
       </Button>

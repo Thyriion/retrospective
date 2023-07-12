@@ -15,7 +15,9 @@ export const AuthProvider = ({children}) => {
 
   const login = (userEmail: string, userPassword: string) => {
     logIn(userEmail, userPassword).then(data => {
-      setUser(data);
+      if (data.length) {
+        setUser(data);
+      }
     });
   };
 
