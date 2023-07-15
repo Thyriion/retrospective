@@ -1,15 +1,13 @@
-import {View, Text} from 'react-native';
 import React from 'react';
-import {useTheme} from 'react-native-paper';
-import LoginForm from '../components/LoginForm';
-import SignUpForm from '../components/SignUpForm';
 import {createStackNavigator} from '@react-navigation/stack';
-import {themeColors} from '../styles';
+import {themeColors} from '../../../styles';
 import {useColorScheme} from 'react-native';
+import LoginScreen from '../../screens/auth/login/LoginScreen';
+import SignUpScreen from '../../screens/auth/register/SignUpScreen';
 
 const Stack = createStackNavigator();
 
-const AuthStack = () => {
+const AuthNav = () => {
   const scheme = useColorScheme();
   const headerStyleBackgroundColor =
     scheme === 'dark' ? themeColors.violet700 : themeColors.violet300;
@@ -25,10 +23,10 @@ const AuthStack = () => {
         },
         headerTintColor: headerTintColor,
       }}>
-      <Stack.Screen name="LogIn" component={LoginForm} />
-      <Stack.Screen name="SignUp" component={SignUpForm} />
+      <Stack.Screen name="LogIn" component={LoginScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
     </Stack.Navigator>
   );
 };
 
-export default AuthStack;
+export default AuthNav;

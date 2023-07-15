@@ -1,19 +1,14 @@
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  useColorScheme,
-} from 'react-native';
-import React, {useContext, useState} from 'react';
-import {Button, useTheme} from 'react-native-paper';
+import {View, Text, StyleSheet, TextInput, useColorScheme} from 'react-native';
+import React from 'react';
+import {Button} from 'react-native-paper';
 import {Controller, useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
-import {AuthContext} from '../context/AuthContext';
-import {themeColors} from '../styles';
+import {themeColors} from '../../../../styles';
+import {loginUser} from '../../../services/auth/loginUser';
+import {useAppDispatch} from '../../../hooks/redux/hooks';
+import {login} from '../../../redux/reducers/userSlice';
 
-const LoginForm = ({navigation}) => {
+const LoginScreen = ({navigation}) => {
   const {
     control,
     handleSubmit,
@@ -24,12 +19,16 @@ const LoginForm = ({navigation}) => {
       password: '',
     },
   });
-  const {user, login} = useContext(AuthContext);
 
   const scheme = useColorScheme();
+  const dispatch = useAppDispatch();
 
-  const onSubmit = userData => {
-    login(userData.email, userData.password);
+  const onSubmit = async userData => {
+    await loginUser(userData.email, userData.password).then(user => {
+      if (user) {
+        dispatch(login());
+      }
+    });
   };
 
   const styles = StyleSheet.create({
@@ -137,4 +136,4 @@ const LoginForm = ({navigation}) => {
   );
 };
 
-export default LoginForm;
+export default LoginScreen;

@@ -1,13 +1,14 @@
-import {Text, View, Alert, StyleSheet, useColorScheme} from 'react-native';
+import {Text, View, StyleSheet, useColorScheme} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {useTheme, Button, TextInput} from 'react-native-paper';
+import {Button, TextInput} from 'react-native-paper';
 import {ErrorMessage} from '@hookform/error-message';
-import {createUser} from '../lib/supabase';
-import {useContext} from 'react';
-import {AuthContext} from '../context/AuthContext';
-import {themeColors} from '../styles';
+import {themeColors} from '../../../../styles';
+import {createUser} from '../../../services/auth/createUser';
+import {loginUser} from '../../../services/auth/loginUser';
+import {useAppDispatch} from '../../../hooks/redux/hooks';
+import {login} from '../../../redux/reducers/userSlice';
 
-const SignUpForm = () => {
+const SignUpScreen = () => {
   const {
     control,
     handleSubmit,
@@ -20,14 +21,17 @@ const SignUpForm = () => {
     },
   });
 
-  const {colors} = useTheme();
-  const {user, login} = useContext(AuthContext);
+  const dispatch = useAppDispatch();
 
   const scheme = useColorScheme();
 
   const onSubmit = userData => {
-    createUser(userData.username, userData.email, userData.password);
-    login(userData.email, userData.password);
+    createUser(userData.username, userData.email, userData.password).then(
+      () => {
+        loginUser(userData.email, userData.password);
+        dispatch(login());
+      },
+    );
   };
 
   const styles = StyleSheet.create({
@@ -161,4 +165,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignUpScreen;

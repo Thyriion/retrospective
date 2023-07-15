@@ -2,17 +2,17 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {useTheme} from 'react-native-paper';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../../screens/HomeScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SettingsScreen from '../screens/SettingsScreen';
-import RetroOverviewScreen from '../screens/RetroOverviewScreen';
-import ActionItemsScreen from '../screens/ActionItemsScreen';
-import {styles, themeColors} from '../styles';
+import SettingsScreen from '../../screens/profile/SettingsScreen';
+import RetroOverviewScreen from '../../screens/retro/list/RetroOverviewScreen';
+import ActionItemsScreen from '../../screens/retro/detail/ActionItemsScreen';
+import {styles, themeColors} from '../../../styles';
 import {useColorScheme} from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function AppStack() {
+export default function HomeNav() {
   const scheme = useColorScheme();
 
   const styles = StyleSheet.create({
