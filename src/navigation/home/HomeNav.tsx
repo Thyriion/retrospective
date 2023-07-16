@@ -1,13 +1,12 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {useTheme} from 'react-native-paper';
 import HomeScreen from '../../screens/HomeScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SettingsScreen from '../../screens/profile/SettingsScreen';
 import RetroOverviewScreen from '../../screens/retro/list/RetroOverviewScreen';
 import ActionItemsScreen from '../../screens/retro/detail/ActionItemsScreen';
-import {styles, themeColors} from '../../../styles';
+import {themeColors} from '../../styles/theme';
 import {useColorScheme} from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -15,23 +14,12 @@ const Tab = createMaterialBottomTabNavigator();
 export default function HomeNav() {
   const scheme = useColorScheme();
 
-  const styles = StyleSheet.create({
-    barStyle: {
-      backgroundColor:
-        scheme === 'dark' ? themeColors.violet700 : themeColors.violet200,
-    },
-  });
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      barStyle={styles.barStyle}
-      activeColor={
-        scheme === 'dark' ? themeColors.violet200 : themeColors.violet800
-      }
-      inactiveColor={
-        scheme === 'dark' ? themeColors.violet100 : themeColors.violet600
-      }>
+      barStyle={{backgroundColor: themeColors.violet700}}
+      activeColor={themeColors.violet200}
+      inactiveColor={themeColors.violet100}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}

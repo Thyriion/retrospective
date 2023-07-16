@@ -20,9 +20,16 @@ export async function createUser(
   let {data, error} = await supabase
     .from('User')
     .insert({name: username, email: userEmail, password: password.encodedHash});
-  const jsonData = JSON.stringify(data);
-  await AsyncStorage.setItem('user', jsonData);
+
+  let jsonData = '';
+
   if (error) {
-    console.error(data);
+    console.log(error);
+  } else {
+    console.log('else');
+    jsonData = JSON.stringify(data);
+    await AsyncStorage.setItem('user', jsonData);
   }
+
+  return jsonData;
 }

@@ -1,5 +1,3 @@
-import {StyleSheet} from 'react-native';
-
 export const themeColors = {
   gray100: '#F1F1F1',
   gray200: '#D4D4D4',
@@ -56,14 +54,3 @@ export const themeColors = {
   blue800: '#16274A',
   blue900: '#070D19',
 };
-
-export const styles = StyleSheet.create({
-  dark: {
-    backgroundColor: themeColors.gray900,
-    color: themeColors.violet500,
-  },
-  light: {
-    backgroundColor: themeColors.gray100,
-    color: themeColors.violet500,
-  },
-});

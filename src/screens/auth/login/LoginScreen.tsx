@@ -1,12 +1,13 @@
-import {View, Text, StyleSheet, TextInput, useColorScheme} from 'react-native';
 import React from 'react';
-import {Button} from 'react-native-paper';
 import {Controller, useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
-import {themeColors} from '../../../../styles';
 import {loginUser} from '../../../services/auth/loginUser';
 import {useAppDispatch} from '../../../hooks/redux/hooks';
 import {login} from '../../../redux/reducers/userSlice';
+import CustomView from '../../../components/general/view/View';
+import CustomTextInput from '../../../components/general/textinput/TextInput';
+import ErrorText from '../../../components/general/errorMessage/ErrorMessage';
+import FormButton from '../../../components/general/button/FormButton';
 
 const LoginScreen = ({navigation}) => {
   const {
@@ -20,7 +21,6 @@ const LoginScreen = ({navigation}) => {
     },
   });
 
-  const scheme = useColorScheme();
   const dispatch = useAppDispatch();
 
   const onSubmit = async userData => {
@@ -31,108 +31,49 @@ const LoginScreen = ({navigation}) => {
     });
   };
 
-  const styles = StyleSheet.create({
-    textInput: {
-      backgroundColor: themeColors.violet500,
-      paddingLeft: 10,
-      marginVertical: 5,
-      color: themeColors.violet100,
-      width: 300,
-      height: 35,
-      borderRadius: 5,
-    },
-    errorMessage: {
-      backgroundColor: themeColors.red500,
-      padding: 10,
-      color: themeColors.gray100,
-      borderRadius: 50,
-    },
-    background: {
-      backgroundColor:
-        scheme === 'dark' ? themeColors.gray900 : themeColors.gray100,
-    },
-  });
-
   return (
-    <View
-      style={[
-        {
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        styles.background,
-      ]}>
-      <View
-        style={[
-          {
-            justifyContent: 'center',
-            alignItems: 'center',
+    <CustomView>
+      <Controller
+        control={control}
+        name="email"
+        render={({field: {onChange, value, onBlur}}) => (
+          <CustomTextInput
+            placeholder="email@example.com"
+            value={value}
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="password"
+        render={({field: {onChange, value, onBlur}}) => (
+          <CustomTextInput
+            placeholder="Passwort"
+            value={value}
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
+          />
+        )}
+        rules={{
+          required: {
+            value: true,
+            message: 'Das Feld ist ein Pflichtfeld!',
           },
-          styles.background,
-        ]}>
-        <Controller
-          control={control}
-          name="email"
-          render={({field: {onChange, value, onBlur}}) => (
-            <TextInput
-              placeholder="email@example.com"
-              value={value}
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              style={styles.textInput}
-              placeholderTextColor={themeColors.violet200}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({field: {onChange, value, onBlur}}) => (
-            <TextInput
-              placeholder="Passwort"
-              value={value}
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              style={styles.textInput}
-              placeholderTextColor={themeColors.violet200}
-              textContentType="password"
-              secureTextEntry={true}
-            />
-          )}
-          rules={{
-            required: {
-              value: true,
-              message: 'Das Feld ist ein Pflichtfeld!',
-            },
-          }}
-        />
-        <ErrorMessage
-          errors={errors}
-          name="password"
-          render={({message}) => (
-            <Text style={styles.errorMessage}>{message}</Text>
-          )}
-        />
-
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          buttonColor={themeColors.violet500}
-          textColor={themeColors.violet100}
-          rippleColor={themeColors.violet300}
-          style={{width: 150, marginTop: 20}}>
-          Einloggen
-        </Button>
-      </View>
-      <Button
-        onPress={() => navigation.navigate('SignUp')}
-        buttonColor={themeColors.violet500}
-        textColor={themeColors.violet100}
-        rippleColor={themeColors.violet300}
-        style={{width: 150, marginTop: 10}}>
-        Registrieren
-      </Button>
-    </View>
+        }}
+      />
+      <ErrorMessage
+        errors={errors}
+        name="password"
+        render={({message}) => <ErrorText message={message} />}
+      />
+      <FormButton text="Einloggen" onPress={handleSubmit(onSubmit)} />
+      <FormButton
+        text="Registrieren"
+        onPress={() => navigation.navigate('Registrieren')}
+      />
+    </CustomView>
   );
 };
 

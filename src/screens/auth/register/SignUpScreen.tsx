@@ -1,14 +1,16 @@
-import {Text, View, StyleSheet, useColorScheme} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {Button, TextInput} from 'react-native-paper';
 import {ErrorMessage} from '@hookform/error-message';
-import {themeColors} from '../../../../styles';
 import {createUser} from '../../../services/auth/createUser';
-import {loginUser} from '../../../services/auth/loginUser';
-import {useAppDispatch} from '../../../hooks/redux/hooks';
-import {login} from '../../../redux/reducers/userSlice';
+import CustomView from '../../../components/general/view/View';
+import CustomTextInput from '../../../components/general/textinput/TextInput';
+import FormButton from '../../../components/general/button/FormButton';
+import ErrorText from '../../../components/general/errorMessage/ErrorMessage';
+import {useState} from 'react';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
+
+  const [error, setError] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -21,61 +23,32 @@ const SignUpScreen = () => {
     },
   });
 
-  const dispatch = useAppDispatch();
-
-  const scheme = useColorScheme();
-
   const onSubmit = userData => {
     createUser(userData.username, userData.email, userData.password).then(
-      () => {
-        loginUser(userData.email, userData.password);
-        dispatch(login());
+      user => {
+        if (user) {
+          setError(false);
+          navigation.navigate('Teamwahl', {
+            userData: userData,
+          });
+        } else {
+          setError(true);
+        }
       },
     );
   };
 
-  const styles = StyleSheet.create({
-    textInput: {
-      backgroundColor: themeColors.violet500,
-      marginVertical: 5,
-      color: themeColors.violet100,
-      width: 300,
-      height: 35,
-      borderRadius: 5,
-    },
-    errorMessage: {
-      backgroundColor: themeColors.red500,
-      padding: 10,
-      color: themeColors.gray100,
-      borderRadius: 50,
-    },
-    background: {
-      backgroundColor:
-        scheme === 'dark' ? themeColors.gray900 : themeColors.gray100,
-    },
-  });
-
   return (
-    <View
-      style={[
-        {
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        styles.background,
-      ]}>
+    <CustomView>
       <Controller
         control={control}
         name="username"
         render={({field: {onChange, value, onBlur}}) => (
-          <TextInput
+          <CustomTextInput
             placeholder="Benutzername"
             value={value}
             onBlur={onBlur}
             onChangeText={value => onChange(value)}
-            style={styles.textInput}
-            placeholderTextColor="#C0C0C0"
           />
         )}
         rules={{
@@ -88,21 +61,17 @@ const SignUpScreen = () => {
       <ErrorMessage
         errors={errors}
         name="username"
-        render={({message}) => (
-          <Text style={styles.errorMessage}>{message}</Text>
-        )}
+        render={({message}) => <ErrorText message={message} />}
       />
       <Controller
         control={control}
         name="email"
         render={({field: {onChange, value, onBlur}}) => (
-          <TextInput
+          <CustomTextInput
             placeholder="email@example.com"
             value={value}
             onBlur={onBlur}
             onChangeText={value => onChange(value)}
-            style={styles.textInput}
-            placeholderTextColor="#C0C0C0"
           />
         )}
         rules={{
@@ -119,21 +88,17 @@ const SignUpScreen = () => {
       <ErrorMessage
         errors={errors}
         name="email"
-        render={({message}) => (
-          <Text style={styles.errorMessage}>{message}</Text>
-        )}
+        render={({message}) => <ErrorText message={message} />}
       />
       <Controller
         control={control}
         name="password"
         render={({field: {onChange, value, onBlur}}) => (
-          <TextInput
+          <CustomTextInput
             placeholder="Passwort"
             value={value}
             onBlur={onBlur}
             onChangeText={value => onChange(value)}
-            style={styles.textInput}
-            placeholderTextColor="#C0C0C0"
             textContentType="password"
             secureTextEntry={true}
           />
@@ -148,20 +113,14 @@ const SignUpScreen = () => {
       <ErrorMessage
         errors={errors}
         name="password"
-        render={({message}) => (
-          <Text style={styles.errorMessage}>{message}</Text>
-        )}
+        render={({message}) => <ErrorText message={message} />}
       />
+      {error && (
+        <ErrorText message="Die Mailadresse wird bereits verwendet. Benutze eine andere!" />
+      )}
 
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        buttonColor={themeColors.violet500}
-        textColor={themeColors.violet100}
-        rippleColor={themeColors.violet300}
-        style={{width: 150, marginTop: 20}}>
-        Sign Up
-      </Button>
-    </View>
+      <FormButton text="Registrieren" onPress={handleSubmit(onSubmit)} />
+    </CustomView>
   );
 };
 
