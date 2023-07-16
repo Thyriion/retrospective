@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
 import {loginUser} from '../../../services/auth/loginUser';
@@ -7,7 +7,8 @@ import {login} from '../../../redux/reducers/userSlice';
 import CustomView from '../../../components/general/view/View';
 import CustomTextInput from '../../../components/general/textinput/TextInput';
 import ErrorText from '../../../components/general/errorMessage/ErrorMessage';
-import FormButton from '../../../components/general/button/FormButton';
+import GeneralButton from '../../../components/general/button/GeneralButton';
+import LoadingCircle from '../../../components/general/loadingCircle/LoadingCircle';
 
 const LoginScreen = ({navigation}) => {
   const {
@@ -21,59 +22,75 @@ const LoginScreen = ({navigation}) => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const onSubmit = async userData => {
+    setLoading(true);
     await loginUser(userData.email, userData.password).then(user => {
       if (user) {
         dispatch(login());
       }
     });
+    setLoading(false);
   };
 
   return (
-    <CustomView>
-      <Controller
-        control={control}
-        name="email"
-        render={({field: {onChange, value, onBlur}}) => (
-          <CustomTextInput
-            placeholder="email@example.com"
-            value={value}
-            onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+    <>
+      {loading && (
+        <CustomView>
+          <LoadingCircle />
+        </CustomView>
+      )}
+
+      {!loading && (
+        <CustomView>
+          <Controller
+            control={control}
+            name="email"
+            render={({field: {onChange, value, onBlur}}) => (
+              <CustomTextInput
+                placeholder="email@example.com"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={value => onChange(value)}
+              />
+            )}
           />
-        )}
-      />
-      <Controller
-        control={control}
-        name="password"
-        render={({field: {onChange, value, onBlur}}) => (
-          <CustomTextInput
-            placeholder="Passwort"
-            value={value}
-            onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+          <Controller
+            control={control}
+            name="password"
+            render={({field: {onChange, value, onBlur}}) => (
+              <CustomTextInput
+                placeholder="Passwort"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={value => onChange(value)}
+                textContentType="password"
+                secureTextEntry={true}
+              />
+            )}
+            rules={{
+              required: {
+                value: true,
+                message: 'Das Feld ist ein Pflichtfeld!',
+              },
+            }}
           />
-        )}
-        rules={{
-          required: {
-            value: true,
-            message: 'Das Feld ist ein Pflichtfeld!',
-          },
-        }}
-      />
-      <ErrorMessage
-        errors={errors}
-        name="password"
-        render={({message}) => <ErrorText message={message} />}
-      />
-      <FormButton text="Einloggen" onPress={handleSubmit(onSubmit)} />
-      <FormButton
-        text="Registrieren"
-        onPress={() => navigation.navigate('Registrieren')}
-      />
-    </CustomView>
+          <ErrorMessage
+            errors={errors}
+            name="password"
+            render={({message}) => <ErrorText message={message} />}
+          />
+          <GeneralButton text="Einloggen" onPress={handleSubmit(onSubmit)} />
+          <GeneralButton
+            text="Registrieren"
+            onPress={() => navigation.navigate('Registrieren')}
+          />
+        </CustomView>
+      )}
+    </>
   );
 };
 

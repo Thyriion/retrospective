@@ -17,9 +17,9 @@ export default function HomeNav() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      barStyle={{backgroundColor: themeColors.violet700}}
+      barStyle={{backgroundColor: themeColors.blue800}}
       activeColor={themeColors.violet200}
-      inactiveColor={themeColors.violet100}>
+      inactiveColor={themeColors.blue300}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}

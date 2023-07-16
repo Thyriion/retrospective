@@ -2,12 +2,12 @@ import React from 'react';
 import {Button} from 'react-native-paper';
 import {themeColors} from '../../../styles/theme';
 
-type FormButtonProps = {
+type GeneralButtonProps = {
   text: string;
   onPress: () => void;
 };
 
-const FormButton = ({text, onPress}: FormButtonProps) => {
+const GeneralButton = ({text, onPress}: GeneralButtonProps) => {
   return (
     <Button
       onPress={onPress}
@@ -23,4 +23,4 @@ const FormButton = ({text, onPress}: FormButtonProps) => {
   );
 };
 
-export default FormButton;
+export default GeneralButton;

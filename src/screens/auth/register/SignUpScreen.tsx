@@ -3,12 +3,11 @@ import {ErrorMessage} from '@hookform/error-message';
 import {createUser} from '../../../services/auth/createUser';
 import CustomView from '../../../components/general/view/View';
 import CustomTextInput from '../../../components/general/textinput/TextInput';
-import FormButton from '../../../components/general/button/FormButton';
+import GeneralButton from '../../../components/general/button/GeneralButton';
 import ErrorText from '../../../components/general/errorMessage/ErrorMessage';
 import {useState} from 'react';
 
 const SignUpScreen = ({navigation}) => {
-
   const [error, setError] = useState(false);
 
   const {
@@ -119,7 +118,7 @@ const SignUpScreen = ({navigation}) => {
         <ErrorText message="Die Mailadresse wird bereits verwendet. Benutze eine andere!" />
       )}
 
-      <FormButton text="Registrieren" onPress={handleSubmit(onSubmit)} />
+      <GeneralButton text="Registrieren" onPress={handleSubmit(onSubmit)} />
     </CustomView>
   );
 };

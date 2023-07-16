@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
-import {View} from 'react-native';
 import React from 'react';
-import {Button, useTheme} from 'react-native-paper';
 import {logoutUser} from '../services/auth/logoutUser';
 import {useAppDispatch} from '../hooks/redux/hooks';
 import {logout} from '../redux/reducers/userSlice';
+import CustomView from '../components/general/view/View';
+import GeneralButton from '../components/general/button/GeneralButton';
 
 const HomeScreen = () => {
-  const {colors} = useTheme();
   const dispatch = useAppDispatch();
 
   const handleLogOut = async () => {
@@ -16,15 +15,9 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={{backgroundColor: colors.background, flex: 1}}>
-      <Button
-        onPress={handleLogOut}
-        buttonColor={colors.primary}
-        textColor={colors.secondary}
-        rippleColor={colors.onPrimary}>
-        Blub
-      </Button>
-    </View>
+    <CustomView>
+      <GeneralButton onPress={handleLogOut} text="Logout" />
+    </CustomView>
   );
 };
 export default HomeScreen;
