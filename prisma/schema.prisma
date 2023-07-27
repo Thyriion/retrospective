@@ -12,9 +12,10 @@ datasource db {
 }
 
 model Team {
-  id   Int    @id @default(autoincrement())
-  name String
-  User User[]
+  id    Int     @id @default(autoincrement())
+  name  String
+  User  User[]
+  Retro Retro[]
 }
 
 model User {
@@ -26,4 +27,21 @@ model User {
   team      Team?    @relation(fields: [teamId], references: [id])
   teamId    Int?
   createdAt DateTime @default(now())
+  retro     Retro[]
+}
+
+model Retro {
+  id        Int      @id @default(autoincrement())
+  completed DateTime
+  attendees User[]
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    Int
+  Action    Action[]
+}
+
+model Action {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  retro       Retro[]
 }

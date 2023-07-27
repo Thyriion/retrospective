@@ -7,17 +7,17 @@ import CustomView from '../components/general/view/View';
 import GeneralButton from '../components/general/button/GeneralButton';
 
 const HomeScreen = () => {
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const handleLogOut = async () => {
-    await logoutUser();
-    dispatch(logout());
-  };
+    const handleLogOut = async () => {
+        await logoutUser();
+        dispatch(logout());
+    };
 
-  return (
-    <CustomView>
-      <GeneralButton onPress={handleLogOut} text="Logout" />
-    </CustomView>
-  );
+    return (
+        <CustomView>
+            <GeneralButton onPress={handleLogOut} text="Logout"/>
+        </CustomView>
+    );
 };
 export default HomeScreen;

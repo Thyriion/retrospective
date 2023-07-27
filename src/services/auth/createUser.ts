@@ -8,8 +8,7 @@ export async function createUser(
   userEmail: String,
   userPassword: String,
 ) {
-  const salt = ARGONSALT;
-  const password = await argon2(userPassword, salt, {
+  const password = await argon2(userPassword, ARGONSALT, {
     iterations: 5,
     memory: 16 * 1024,
     parallelism: 2,

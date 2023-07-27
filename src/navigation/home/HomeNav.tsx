@@ -1,4 +1,3 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import HomeScreen from '../../screens/HomeScreen';
@@ -7,13 +6,10 @@ import SettingsScreen from '../../screens/profile/SettingsScreen';
 import RetroOverviewScreen from '../../screens/retro/list/RetroOverviewScreen';
 import ActionItemsScreen from '../../screens/retro/detail/ActionItemsScreen';
 import {themeColors} from '../../styles/theme';
-import {useColorScheme} from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function HomeNav() {
-  const scheme = useColorScheme();
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -30,15 +26,6 @@ export default function HomeNav() {
         }}
       />
       <Tab.Screen
-        name="Aktuelle Maßnahmen"
-        component={ActionItemsScreen}
-        options={{
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="clock" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Retro-Übersicht"
         component={RetroOverviewScreen}
         options={{
@@ -48,6 +35,15 @@ export default function HomeNav() {
               color={color}
               size={26}
             />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Aktuelle Maßnahmen"
+        component={ActionItemsScreen}
+        options={{
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="clock" color={color} size={26} />
           ),
         }}
       />

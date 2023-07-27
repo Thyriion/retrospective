@@ -7,8 +7,7 @@ export async function loginUser(
   userEmail: String,
   userPassword: String,
 ): Promise<string | null> {
-  const salt = ARGONSALT;
-  const password = await argon2(userPassword, salt, {
+  const password = await argon2(userPassword, ARGONSALT, {
     iterations: 5,
     memory: 16 * 1024,
     parallelism: 2,
