@@ -1,16 +1,24 @@
 import {Text} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CustomView from '../../../components/general/view/View';
 import {getTeamByLoggedInUser} from "../../../services/auth/getUser";
 
 const RetroOverviewScreen = () => {
-    let teamId;
-    getTeamByLoggedInUser(98).then(id => teamId = id);
-    console.warn(teamId);
+    const [team, setTeam] = useState('');
+
+    useEffect(() => {
+        const getTeam = async () => {
+            setTeam(await getTeamByLoggedInUser(98));
+        }
+
+        getTeam();
+    }, [])
+
+    
     return (
-        <CustomView>
-            <Text>RetroOverviewScreen</Text>
-        </CustomView>
+      <CustomView>
+        <Text></Text>
+      </CustomView>
     );
 };
 

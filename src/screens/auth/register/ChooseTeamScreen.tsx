@@ -3,10 +3,10 @@ import {useAppDispatch} from '../../../hooks/redux/hooks';
 import CustomView from '../../../components/general/view/View';
 import {assignTeamToUser} from '../../../services/auth/assignTeam';
 import {useRoute} from '@react-navigation/native';
-import {loginUser} from '../../../services/auth/loginUser';
 import {login} from '../../../redux/reducers/userSlice';
 import ClickableCard from '../../../components/general/card/ClickableCard';
 import LoadingCircle from '../../../components/general/loadingCircle/LoadingCircle';
+import {loginUser} from "../../../services/auth/authService";
 
 const ChooseTeamScreen = () => {
   const dispatch = useAppDispatch();

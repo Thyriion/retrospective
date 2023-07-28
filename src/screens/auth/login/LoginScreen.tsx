@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
-import {loginUser} from '../../../services/auth/loginUser';
 import {useAppDispatch} from '../../../hooks/redux/hooks';
 import {login} from '../../../redux/reducers/userSlice';
 import CustomView from '../../../components/general/view/View';
@@ -9,6 +8,7 @@ import CustomTextInput from '../../../components/general/textinput/TextInput';
 import ErrorText from '../../../components/general/errorMessage/ErrorMessage';
 import GeneralButton from '../../../components/general/button/GeneralButton';
 import LoadingCircle from '../../../components/general/loadingCircle/LoadingCircle';
+import {AuthService} from "../../../services/auth/authService";
 
 const LoginScreen = ({navigation}) => {
   const {
@@ -28,7 +28,7 @@ const LoginScreen = ({navigation}) => {
 
   const onSubmit = async userData => {
     setLoading(true);
-    await loginUser(userData.email, userData.password).then(user => {
+    await AuthService.loginUser(userData.email, userData.password).then(user => {
       if (user) {
         dispatch(login());
       }

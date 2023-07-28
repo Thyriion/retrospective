@@ -8,5 +8,9 @@ export const textInputStyles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 5,
     paddingLeft: 5,
+    color: themeColors.gray100
   },
+  textInputPlaceholder: {
+    color: themeColors.gray800
+  }
 });

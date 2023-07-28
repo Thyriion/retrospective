@@ -1,19 +1,24 @@
 import {supabase} from "../supabase";
 
+type Team = {
+    name: string
+}
+
 export const getTeamByLoggedInUser = async (userId: number) => {
     let {data, error} = await supabase
         .from("User")
-        .select("teamId")
+        .select("Team (name)")
         .eq("id", userId);
 
     if (error) {
         console.error(error);
-        return;
+        return '';
     }
 
-    let teamId;
-    teamId = JSON.stringify(data);
-    // console.warn(teamId)
-
-    return teamId;
+    let teamName: string = '';
+    if (data) {
+        let team: Team = data[0].Team[0].name;
+        teamName = team.name;
+    }
+    return teamName;
 }

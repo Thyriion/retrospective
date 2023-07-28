@@ -1,9 +1,14 @@
 import argon2 from 'react-native-argon2';
+import {ARGONSALT} from '@env';
 import {supabase} from '../supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ARGONSALT} from '@env';
 
-export async function loginUser(
+type AuthService = {
+  loginUser: (userEmail: String, userPassword: String) => Promise<string | null>;
+  logoutUser: () => Promise<boolean>;
+};
+
+async function loginUser(
   userEmail: String,
   userPassword: String,
 ): Promise<string | null> {
@@ -37,4 +42,19 @@ export async function loginUser(
   }
 
   return jsonData;
+}
+
+async function logoutUser(): Promise<boolean> {
+  try {
+    await AsyncStorage.removeItem('user');
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+  return true;
+}
+
+export const AuthService: AuthService = {
+    loginUser,
+    logoutUser
 }

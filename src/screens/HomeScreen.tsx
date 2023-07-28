@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {logoutUser} from '../services/auth/logoutUser';
 import {useAppDispatch} from '../hooks/redux/hooks';
 import {logout} from '../redux/reducers/userSlice';
 import CustomView from '../components/general/view/View';
 import GeneralButton from '../components/general/button/GeneralButton';
+import {AuthService} from "../services/auth/authService";
 
 const HomeScreen = () => {
     const dispatch = useAppDispatch();
 
     const handleLogOut = async () => {
-        await logoutUser();
+        await AuthService.logoutUser();
         dispatch(logout());
     };
 

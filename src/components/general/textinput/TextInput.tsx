@@ -41,6 +41,7 @@ const CustomTextInput = ({
       style={textInputStyles.textInput}
       textContentType={textContentType}
       secureTextEntry={secureTextEntry}
+      placeholderTextColor={textInputStyles.textInputPlaceholder.color}
     />
   );
 };
