@@ -1,57 +1,36 @@
-import argon2 from 'react-native-argon2';
-import {ARGONSALT} from '@env';
-import {supabase} from '../supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from "@react-native-firebase/auth";
 
 type AuthService = {
-  loginUser: (userEmail: String, userPassword: String) => Promise<string | null>;
-  logoutUser: () => Promise<boolean>;
+    loginUser: (userEmail: string, userPassword: string) => Promise<void>;
+    logoutUser: () => Promise<void>;
 };
 
 async function loginUser(
-  userEmail: String,
-  userPassword: String,
-): Promise<string | null> {
-  const password = await argon2(userPassword, ARGONSALT, {
-    iterations: 5,
-    memory: 16 * 1024,
-    parallelism: 2,
-    hashLength: 20,
-    mode: 'argon2i',
-  });
-  let {data, error} = await supabase
-    .from('User')
-    .select()
-    .eq('email', userEmail)
-    .eq('password', password.encodedHash);
-  if (error) {
-    console.error(error);
-    return null;
-  }
-
-  let jsonData = '';
-  if (data?.length) {
-    jsonData = JSON.stringify(data);
-  }
-  if (jsonData) {
-    try {
-      await AsyncStorage.setItem('user', jsonData);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  return jsonData;
+    userEmail: string,
+    userPassword: string,
+): Promise<void> {
+    auth()
+        .signInWithEmailAndPassword(userEmail, userPassword)
+        .then(async userCredentials => {
+            const token = await userCredentials.user.getIdToken();
+            await AsyncStorage.setItem('usertoken', token);
+        })
+        .catch(error => {
+            console.error(error);
+        })
 }
 
-async function logoutUser(): Promise<boolean> {
-  try {
-    await AsyncStorage.removeItem('user');
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-  return true;
+async function logoutUser(): Promise<void> {
+    auth()
+        .signOut()
+        .then(async () => {
+            await AsyncStorage.removeItem('usertoken');
+            console.log('User logged out!');
+        })
+        .catch(error => {
+            console.error(error);
+        })
 }
 
 export const AuthService: AuthService = {
