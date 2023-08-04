@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "707048307149",
+    "project_id": "retrospektive-25773",
+    "storage_bucket": "retrospektive-25773.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707048307149:android:5457c1ef8d941fb7126c84",
+        "android_client_info": {
+          "package_name": "com.retrospective"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707048307149-es4a3ghl22h32oj5fdallsupfgf8kqcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPG4nuOQDceonF_ew3DP38_rKOZ_mY1og"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707048307149-es4a3ghl22h32oj5fdallsupfgf8kqcc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
