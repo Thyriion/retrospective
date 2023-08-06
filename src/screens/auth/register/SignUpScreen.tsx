@@ -4,12 +4,18 @@ import CustomView from '../../../components/general/view/View';
 import CustomTextInput from '../../../components/general/textinput/TextInput';
 import GeneralButton from '../../../components/general/button/GeneralButton';
 import ErrorText from '../../../components/general/errorMessage/ErrorMessage';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import UserService from "../../../services/user/userService";
+import {RootState} from "../../../redux/store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useAppDispatch, useAppSelector} from "../../../hooks/redux/hooks";
+import {showError} from "../../../redux/reducers/errorSlice";
+import ErrorCard from "../../../components/general/errorMessage/ErrorCard";
 
 const SignUpScreen = ({navigation}) => {
     const [error, setError] = useState(false);
-
+    const errorReduce = useAppSelector((state: RootState) => state.error);
+    const dispatch = useAppDispatch();
     const {
         control,
         handleSubmit,
@@ -21,12 +27,35 @@ const SignUpScreen = ({navigation}) => {
         },
     });
 
-    const onSubmit = userData => {
+    const onSubmit = async userData => {
+
         UserService.createUser(userData.email, userData.password)
+            .then(async () => {
+                dispatch(showError({showError: false, errorMessage: ''}))
+                const token = await userData.user.getIdToken();
+                await AsyncStorage.setItem('usertoken', token);
+                navigation.navigate('Teamwahl');
+            })
+            .catch((error) => {
+                let message = '';
+                if (error.code === 'auth/email-already-in-use') {
+                    message = 'That email address is already in use!';
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    message = 'That email address is invalid!';
+                }
+                dispatch(showError({showError: true, errorMessage: message}))
+            });
+
+
     };
 
     return (
         <CustomView>
+            {errorReduce.showError &&
+                <ErrorCard errorMessage={errorReduce.errorMessage}/>
+            }
             <Controller
                 control={control}
                 name="email"

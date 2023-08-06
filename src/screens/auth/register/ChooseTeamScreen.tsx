@@ -4,6 +4,8 @@ import CustomView from '../../../components/general/view/View';
 import {useRoute} from '@react-navigation/native';
 import ClickableCard from '../../../components/general/card/ClickableCard';
 import LoadingCircle from '../../../components/general/loadingCircle/LoadingCircle';
+import UserService from "../../../services/user/userService";
+import {login} from "../../../redux/reducers/userSlice";
 
 const ChooseTeamScreen = () => {
     const dispatch = useAppDispatch();
@@ -22,7 +24,10 @@ const ChooseTeamScreen = () => {
 
     const handleTeamClick = team => {
         setLoading(true);
-
+        UserService.assignTeamToUser(team).then(() => {
+            dispatch(login())
+        });
+        setLoading(false);
     };
     return (
         <>
