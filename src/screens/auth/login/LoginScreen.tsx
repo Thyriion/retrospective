@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {ErrorMessage} from '@hookform/error-message';
-import {useAppDispatch} from '../../../hooks/redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../../hooks/redux/hooks';
 import {login} from '../../../redux/reducers/userSlice';
 import CustomView from '../../../components/general/view/View';
 import CustomTextInput from '../../../components/general/textinput/TextInput';
@@ -10,8 +10,12 @@ import GeneralButton from '../../../components/general/button/GeneralButton';
 import LoadingCircle from '../../../components/general/loadingCircle/LoadingCircle';
 import {AuthService} from "../../../services/auth/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {showError} from "../../../redux/reducers/errorSlice";
+import {RootState} from "../../../redux/store";
+import ErrorCard from "../../../components/general/errorMessage/ErrorCard";
 
 const LoginScreen = ({navigation}) => {
+    const errorReduce = useAppSelector((state: RootState) => state.error);
     const {
         control,
         handleSubmit,
@@ -29,69 +33,85 @@ const LoginScreen = ({navigation}) => {
 
     const onSubmit = async userData => {
         setLoading(true);
-        await AuthService.loginUser(userData.email, userData.password)
-        const userToken = await AsyncStorage.getItem('usertoken');
-        if (userToken) {
-            dispatch(login());
-        }
+        AuthService.loginUser(userData.email, userData.password)
+            .then(async (userData) => {
+                dispatch(showError({showError: false, errorMessage: ''}));
+                const token = await userData.user.getIdToken();
+                await AsyncStorage.setItem('usertoken', token);
+                dispatch(login());
+            })
+            .catch((error) => {
+                let message = '';
+                console.log(error.code);
+                if (error.code === 'auth/wrong-password') {
+                    message = 'Falsches Passwort!';
+                }
+
+                if (error.code === 'auth/too-many-requests') {
+                    message = 'Zu viele Anfragen. Versuche es später erneut!';
+                }
+
+                dispatch(showError({showError: true, errorMessage: message}));
+            })
         setLoading(false);
     };
 
     return (
-        <>
+        <CustomView>
+            {errorReduce.showError &&
+                <ErrorCard errorMessage={errorReduce.errorMessage}/>
+
+            }
             {loading && (
-                <CustomView>
-                    <LoadingCircle/>
-                </CustomView>
+                <LoadingCircle/>
             )}
 
-            {!loading && (
-                <CustomView>
-                    <Controller
-                        control={control}
-                        name="email"
-                        render={({field: {onChange, value, onBlur}}) => (
-                            <CustomTextInput
-                                placeholder="email@example.com"
-                                value={value}
-                                onBlur={onBlur}
-                                onChangeText={value => onChange(value)}
-                            />
-                        )}
-                    />
-                    <Controller
-                        control={control}
-                        name="password"
-                        render={({field: {onChange, value, onBlur}}) => (
-                            <CustomTextInput
-                                placeholder="Passwort"
-                                value={value}
-                                onBlur={onBlur}
-                                onChangeText={value => onChange(value)}
-                                textContentType="password"
-                                secureTextEntry={true}
-                            />
-                        )}
-                        rules={{
-                            required: {
-                                value: true,
-                                message: 'Das Feld ist ein Pflichtfeld!',
-                            },
-                        }}
-                    />
-                    <ErrorMessage
-                        errors={errors}
-                        name="password"
-                        render={({message}) => <ErrorText message={message}/>}
-                    />
-                    <GeneralButton text="Einloggen" onPress={handleSubmit(onSubmit)}/>
-                    <GeneralButton
-                        text="Registrieren"
-                        onPress={() => navigation.navigate('Registrieren')}
-                    />
-                </CustomView>
-            )}
-        </>
+            {!loading && <>
+                <Controller
+                    control={control}
+                    name="email"
+                    render={({field: {onChange, value, onBlur}}) => (
+                        <CustomTextInput
+                            placeholder="email@example.com"
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={value => onChange(value)}
+                        />
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name="password"
+                    render={({field: {onChange, value, onBlur}}) => (
+                        <CustomTextInput
+                            placeholder="Passwort"
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={value => onChange(value)}
+                            textContentType="password"
+                            secureTextEntry={true}
+                        />
+                    )}
+                    rules={{
+                        required: {
+                            value: true,
+                            message: 'Das Feld ist ein Pflichtfeld!',
+                        },
+                    }}
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name="password"
+                    render={({message}) => <ErrorText message={message}/>}
+                />
+                <GeneralButton text="Einloggen" onPress={handleSubmit(onSubmit)}/>
+                <GeneralButton
+                    text="Registrieren"
+                    onPress={() => navigation.navigate('Registrieren')}
+                />
+            </>
+            }
+        </CustomView>
     );
 };
 

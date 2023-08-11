@@ -13,7 +13,6 @@ import {showError} from "../../../redux/reducers/errorSlice";
 import ErrorCard from "../../../components/general/errorMessage/ErrorCard";
 
 const SignUpScreen = ({navigation}) => {
-    const [error, setError] = useState(false);
     const errorReduce = useAppSelector((state: RootState) => state.error);
     const dispatch = useAppDispatch();
     const {
@@ -38,12 +37,17 @@ const SignUpScreen = ({navigation}) => {
             })
             .catch((error) => {
                 let message = '';
+                console.log(error.code);
                 if (error.code === 'auth/email-already-in-use') {
-                    message = 'That email address is already in use!';
+                    message = 'Die Mailadresse wird bereits verwendet!';
                 }
 
                 if (error.code === 'auth/invalid-email') {
-                    message = 'That email address is invalid!';
+                    message = 'Ungültige Mailadresse!';
+                }
+
+                if (error.code === 'auth/weak-password') {
+                    message = 'Verwende ein stärkeres Passwort!';
                 }
                 dispatch(showError({showError: true, errorMessage: message}))
             });
@@ -108,9 +112,6 @@ const SignUpScreen = ({navigation}) => {
                 name="password"
                 render={({message}) => <ErrorText message={message}/>}
             />
-            {error && (
-                <ErrorText message="Die Mailadresse wird bereits verwendet. Benutze eine andere!"/>
-            )}
 
             <GeneralButton text="Registrieren" onPress={handleSubmit(onSubmit)}/>
         </CustomView>

@@ -8,5 +8,6 @@ export const errorTextStyles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     textAlign: 'center',
+    color: themeColors.gray100
   },
 });

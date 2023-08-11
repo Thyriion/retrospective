@@ -1,24 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from "@react-native-firebase/auth";
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 type AuthService = {
-    loginUser: (userEmail: string, userPassword: string) => Promise<void>;
+    loginUser: (userEmail: string, userPassword: string) => Promise<FirebaseAuthTypes.UserCredential>;
     logoutUser: () => Promise<void>;
 };
 
 async function loginUser(
     userEmail: string,
     userPassword: string,
-): Promise<void> {
-    auth()
+): Promise<FirebaseAuthTypes.UserCredential> {
+    return auth()
         .signInWithEmailAndPassword(userEmail, userPassword)
-        .then(async userCredentials => {
-            const token = await userCredentials.user.getIdToken();
-            await AsyncStorage.setItem('usertoken', token);
-        })
-        .catch(error => {
-            console.error(error);
-        })
 }
 
 async function logoutUser(): Promise<void> {
