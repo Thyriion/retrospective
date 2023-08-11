@@ -15,6 +15,7 @@ import {RootState} from "../../../redux/store";
 import ErrorCard from "../../../components/general/errorMessage/ErrorCard";
 import {FirebaseError} from "../../../enum/FirebaseErrorEnum";
 import {FirebaseErrorService} from "../../../services/error/firebaseErrorService";
+import SuccessAnimation from "../../../components/general/animation/SuccessAnimation";
 
 const LoginScreen = ({navigation}) => {
     const errorReduce = useAppSelector((state: RootState) => state.error);
@@ -34,18 +35,20 @@ const LoginScreen = ({navigation}) => {
     const dispatch = useAppDispatch();
 
     const onSubmit = async userData => {
-        setLoading(true);
         AuthService.loginUser(userData.email, userData.password)
             .then(async (user) => {
                 dispatch(showError({showError: false, errorMessage: ''}));
                 const token = await user.user.getIdToken();
                 await AsyncStorage.setItem('usertoken', token);
-                dispatch(login());
+                setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                    dispatch(login());
+                }, 300);
             })
             .catch((error) => {
                 dispatch(showError({showError: true, errorMessage: FirebaseErrorService.getError(error.code)}));
             });
-        setLoading(false);
     };
 
     return (
@@ -55,7 +58,7 @@ const LoginScreen = ({navigation}) => {
 
             }
             {loading && (
-                <LoadingCircle/>
+                <SuccessAnimation/>
             )}
 
             {!loading && <>
