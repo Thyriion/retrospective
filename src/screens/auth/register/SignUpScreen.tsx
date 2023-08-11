@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux/hooks";
 import {showError} from "../../../redux/reducers/errorSlice";
 import ErrorCard from "../../../components/general/errorMessage/ErrorCard";
+import {FirebaseErrorService} from "../../../services/error/firebaseErrorService";
 
 const SignUpScreen = ({navigation}) => {
     const errorReduce = useAppSelector((state: RootState) => state.error);
@@ -36,20 +37,7 @@ const SignUpScreen = ({navigation}) => {
                 navigation.navigate('Teamwahl');
             })
             .catch((error) => {
-                let message = '';
-                console.log(error.code);
-                if (error.code === 'auth/email-already-in-use') {
-                    message = 'Die Mailadresse wird bereits verwendet!';
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                    message = 'Ungültige Mailadresse!';
-                }
-
-                if (error.code === 'auth/weak-password') {
-                    message = 'Verwende ein stärkeres Passwort!';
-                }
-                dispatch(showError({showError: true, errorMessage: message}))
+                dispatch(showError({showError: true, errorMessage: FirebaseErrorService.getError(error.code)}))
             });
 
 

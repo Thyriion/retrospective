@@ -13,6 +13,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {showError} from "../../../redux/reducers/errorSlice";
 import {RootState} from "../../../redux/store";
 import ErrorCard from "../../../components/general/errorMessage/ErrorCard";
+import {FirebaseError} from "../../../enum/FirebaseErrorEnum";
+import {FirebaseErrorService} from "../../../services/error/firebaseErrorService";
 
 const LoginScreen = ({navigation}) => {
     const errorReduce = useAppSelector((state: RootState) => state.error);
@@ -34,25 +36,15 @@ const LoginScreen = ({navigation}) => {
     const onSubmit = async userData => {
         setLoading(true);
         AuthService.loginUser(userData.email, userData.password)
-            .then(async (userData) => {
+            .then(async (user) => {
                 dispatch(showError({showError: false, errorMessage: ''}));
-                const token = await userData.user.getIdToken();
+                const token = await user.user.getIdToken();
                 await AsyncStorage.setItem('usertoken', token);
                 dispatch(login());
             })
             .catch((error) => {
-                let message = '';
-                console.log(error.code);
-                if (error.code === 'auth/wrong-password') {
-                    message = 'Falsches Passwort!';
-                }
-
-                if (error.code === 'auth/too-many-requests') {
-                    message = 'Zu viele Anfragen. Versuche es später erneut!';
-                }
-
-                dispatch(showError({showError: true, errorMessage: message}));
-            })
+                dispatch(showError({showError: true, errorMessage: FirebaseErrorService.getError(error.code)}));
+            });
         setLoading(false);
     };
 
